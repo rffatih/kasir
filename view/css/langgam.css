@@ -1,0 +1,10 @@
+.tombol-beranda{
+  display: inline-block;
+  height: 3rem;
+  width: 3rem;
+  background-color: red;
+}
+.klikkb{
+  color: blue;
+  cursor:pointer;
+}
