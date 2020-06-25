@@ -18,7 +18,7 @@ if (@$body) {
 				<label for="prf-nm" class="col-form-label col-12 col-lg-3">Nama</label>
 				<div class="col">
 					<?php
-					if ($data[0][0] == 5) {
+					if (isset($data[0][0]) && $data[0][0] == 5) {
 						echo nama();
 					} else {
 						echo "<input type='text' name='nama' value='".nama()."' id='prf-nm' class='form-control'>";

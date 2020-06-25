@@ -25,7 +25,7 @@ if (@$body) {
 					<input type="number" min="0"  name="rp" id="rp" class="form-control">
 				</div>
 				<div class="form-group">
-					<label for="id-s">Kode Barang</label>
+					<label for="id-s">Pemasok</label>
 					<?php echo $data["pemasok"]; ?>
 				</div>
 				<input type="submit" name="pembelian-submit" value="KIRIM">
