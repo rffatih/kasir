@@ -18,8 +18,8 @@ class Ajax
           case 'haksessubmit':
             $user  = @$_POST["user"];
             $level = @$_POST["level"];
-            $basis = @$_POST["basis"];
-            $this->haksesSubmit($user, $level, $basis);
+            global $G_DB_utama;
+            $this->haksesSubmit($user, $level, $G_DB_utama);
             break;
           case 'hakseshapus':
             $user  = @$_POST["user"];
@@ -35,33 +35,35 @@ class Ajax
             $bd = @$_POST["bd"];
             $this->bdHapus($bd);
             break;
+          case 'bdreset':
+            $this->bdReset();
+            break;
 
           // PROFIL
           case 'profila':
             $id   = $_POST["user"];
-            $nama = $_POST["nama"];
-            $pass = $_POST["pass"];
+            $nama = formatQuery($_POST["nama"]);
+            $pass = formatQuery($_POST["pass"]);
             $this->profilA($id, $nama, $pass);
             break;
           case 'profilb':
             $id    = $_POST["user"];
-            $pass1 = $_POST["pass1"];
-            $pass2 = $_POST["pass2"];
-            $pass  = $_POST["pass"];
+            $pass1 = formatQuery($_POST["pass1"]);
+            $pass2 = formatQuery($_POST["pass2"]);
+            $pass  = formatQuery($_POST["pass"]);
             $this->profilB($id, $pass1, $pass2, $pass);
             break;
 
           // DEPARTEMEN
           case 'dptbuat':
-            $nama = $_POST["nama"];
+            $nama = formatQuery($_POST["nama"]);
             $laba = $_POST["laba"];
             $this->dptBuat($nama, $laba);
             break;
           case 'dptsunting':
             $id   = $_POST["id-d"];
-            $nama = $_POST["nama"];
-            $laba = $_POST["laba"];
-            $this->dptSunting($id, $nama, $laba);
+            $nama = formatQuery($_POST["nama"]);
+            $this->dptSunting($id, $nama);
             break;
           case 'dpthapus':
             $id   = $_POST["id-d"];
@@ -70,61 +72,69 @@ class Ajax
 
           // PEMASOK
           case 'pmkbuat':
-            $nama = $_POST["nama"];
+            $nama = formatQuery($_POST["nama"]);
             $this->pmkBuat($nama);
             break;
           case 'pmksunting':
             $id   = $_POST["id-p"];
-            $nama = $_POST["nama"];
+            $nama = formatQuery($_POST["nama"]);
             $this->pmkSunting($id, $nama);
             break;
           case 'pmkhapus':
             $id   = $_POST["id"];
             $this->pmkHapus($id);
             break;
+          
+          // HARGA
+          case 'hsunting':
+            $kodeBarang = $_POST['kodebarang'];
+            $hPokok     = $_POST['rppokok-h'];
+            $hJual      = $_POST['rpjual-h'];
+            $this->hsunting($kodeBarang, $hPokok, $hJual);
+            break;
 
           // KODE BARANG
           case 'kbbuat':
-            $kodeBarang = $_POST["kodebarang"];
-            $nama       = $_POST["nama"];
-            $satuan     = $_POST["satuan"];
-            $id_d       = $_POST["id-d"];
+            $kodeBarang = formatQuery($_POST["kodebarang"]);
+            $nama       = formatQuery($_POST["nama"]);
+            $satuan     = formatQuery($_POST["satuan"]);
+            $id_d       = formatQuery($_POST["id-d"]);
             $this->kbBuat($kodeBarang, $nama, $satuan, $id_d);
             break;
           case 'kbsunting':
-            $kodeBarang = $_POST["kodebarang"];
-            $nama       = $_POST["nama"];
-            $satuan     = $_POST["satuan"];
-            $id_d       = $_POST["id-d"];
+            $kodeBarang = formatQuery($_POST["kodebarang"]);
+            $nama       = formatQuery($_POST["nama"]);
+            $satuan     = formatQuery($_POST["satuan"]);
+            $id_d       = formatQuery($_POST["id-d"]);
             $this->kbSunting($kodeBarang, $nama, $satuan, $id_d);
             break;
           case 'kbhapus':
-            $kodeBarang   = $_POST["kodebarang"];
+            $kodeBarang   = formatQuery($_POST["kodebarang"]);
             $this->kbHapus($kodeBarang);
             break;
 
           // PEMBELIAN
           case 'pembeliancekkb':
-            $kodeBarang = $_POST["kb"];
+            $kodeBarang = formatQuery($_POST["kb"]);
             $this->pembelianCekkb($kodeBarang);
             break;
           case 'barangmasuk':
-            $kb   = $_POST["kb"];
-            $n    = $_POST["n"];
-            $rp   = $_POST["rp"];
-            $id_s = $_POST["id-s"];
+            $kb   = formatQuery($_POST["kb"]);
+            $n    = formatQuery($_POST["n"]);
+            $rp   = formatQuery($_POST["rp"]);
+            $id_s = formatQuery($_POST["id-s"]);
             $this->barangMasuk($kb, $n, $rp, $id_s);
             break;
 
           // PENJUALAN
           case 'penjualan':
-            $noNota = $_POST["no-nota"];
-            $yth    = $_POST["yth"];
-            $kodeBarang = $_POST["kode-barang"];
-            $jumlahBarang = $_POST["jumlah-barang"];
-            $hargaBaris = $_POST["harga"];
-            $totalBaris = $_POST["total"];
-            $pembayaran = $_POST["pembayaran"];
+            $noNota = formatQuery($_POST["no-nota"]);
+            $yth    = formatQuery($_POST["yth"]);
+            $kodeBarang = formatQuery($_POST["kode-barang"]);
+            $jumlahBarang = formatQuery($_POST["jumlah-barang"]);
+            $hargaBaris = formatQuery($_POST["harga"]);
+            $totalBaris = formatQuery($_POST["total"]);
+            $pembayaran = formatQuery($_POST["pembayaran"]);
             $this->penjualan($noNota, $yth, $kodeBarang, $jumlahBarang, $hargaBaris, $totalBaris, $pembayaran);
             break;
 
@@ -214,6 +224,15 @@ class Ajax
       echo json_encode($return);
     }
   }
+  private function bdReset()
+  {
+    $Basis = new Basis;
+    $tf = $Basis->reset();
+    if ($tf) {
+      $return[0] = "oyi";
+      echo json_encode($return);
+    }
+  }
 
   // PROFIL
   private function profilA($id, $nama, $pass)
@@ -256,10 +275,10 @@ class Ajax
       echo json_encode($data);
     }
   }
-  private function dptSunting($id, $nama, $laba)
+  private function dptSunting($id, $nama)
   {
     $Departemen = new Departemen;
-    $tf = $Departemen->edit($id, $nama, $laba);
+    $tf = $Departemen->edit($id, $nama);
     if ($tf) {
       $data[] = "oyi";
       echo json_encode($data);
@@ -298,6 +317,17 @@ class Ajax
   {
     $MPemasok = new MPemasok;
     $tf = $MPemasok->hapus($id);
+    if ($tf) {
+      $data[] = "oyi";
+      echo json_encode($data);
+    }
+  }
+
+  // HARGA
+  private function hsunting($kodeBarang, $hPokok, $hJual)
+  {
+    $MHarga = new MHarga;
+    $tf = $MHarga->editHarga($kodeBarang, $hPokok, $hJual);
     if ($tf) {
       $data[] = "oyi";
       echo json_encode($data);

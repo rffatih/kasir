@@ -1,0 +1,178 @@
+DROP TABLE if EXISTS hakses;
+DROP TABLE IF EXISTS routing;
+DROP TABLE IF EXISTS pengguna;
+
+CREATE TABLE IF NOT EXISTS pengguna
+( id_pengguna VARCHAR(25) NOT NULL,
+  password VARCHAR(25) NOT NULL,
+  nama VARCHAR(25),
+  level INT,
+  basisdata VARCHAR(25),
+  PRIMARY KEY (id_pengguna)
+);
+
+CREATE TABLE IF NOT EXISTS routing
+( id_routing INT NOT NULL AUTO_INCREMENT,
+  halaman_routing VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id_routing)
+);
+
+CREATE TABLE IF NOT EXISTS hakses
+( id_pengguna VARCHAR(25) NOT NULL,
+  id_routing INT NOT NULL,
+  PRIMARY KEY (id_pengguna, id_routing),
+  FOREIGN KEY (id_pengguna) REFERENCES pengguna(id_pengguna) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  FOREIGN KEY (id_routing) REFERENCES routing(id_routing) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+INSERT INTO pengguna
+  (id_pengguna, password, nama, level, basisdata) 
+VALUES 
+  ('nosesi', '', '', NULL, ''),
+  ('raya', 'jaya', 'AppEm', 5, '');
+
+INSERT INTO routing
+  (id_routing, halaman_routing)
+VALUES
+  (1, ''),
+  (2, 'login'),
+  (3, 'logout'),
+  (4, 'formpendaftaran'),
+  (5, 'prosespendaftaran'),
+  (6, 'profil'),
+  (7, 'hakakses'),
+  (8, 'basisdata'),
+  (9, 'departemen'),
+  (10, 'suntingdepartemen'),
+  (11, 'pemasok'),
+  (12, 'suntingpemasok'),
+  (13, 'kodebarang'),
+  (14, 'suntingkodebarang'),
+  (15, 'persediaan'),
+  (16, 'hargajual'),
+  (17, 'bukunota'),
+  (18, 'fifo'),
+  (19, 'rekab'),
+  (20, 'pembelian'),
+  (21, 'penjualan'),
+  (22, 'ajax'),
+  (23, 'suntingharga');
+
+INSERT INTO hakses
+  (id_pengguna, id_routing)
+VALUES
+  ('nosesi', 1),
+  ('nosesi', 2),
+  ('nosesi', 3),
+  ('nosesi', 4),
+  ('nosesi', 5),
+  ('raya', 1),
+  ('raya', 2),
+  ('raya', 3),
+  ('raya', 4),
+  ('raya', 5),
+  ('raya', 6),
+  ('raya', 7),
+  ('raya', 8),
+  ('raya', 9),
+  ('raya', 10),
+  ('raya', 11),
+  ('raya', 12),
+  ('raya', 13),
+  ('raya', 14),
+  ('raya', 15),
+  ('raya', 16),
+  ('raya', 17),
+  ('raya', 18),
+  ('raya', 19),
+  ('raya', 20),
+  ('raya', 21),
+  ('raya', 22),
+  ('raya', 23);
+
+DROP TABLE IF EXISTS karung;
+DROP TABLE IF EXISTS barang_keluar;
+DROP TABLE IF EXISTS barang_masuk;
+DROP TABLE IF EXISTS nota;
+DROP TABLE IF EXISTS harga;
+DROP TABLE IF EXISTS kode_barang;
+DROP TABLE IF EXISTS supplier;
+DROP TABLE IF EXISTS departemen;
+
+CREATE TABLE departemen
+( id_d INT NOT NULL AUTO_INCREMENT,
+  nama_d VARCHAR(25) UNIQUE NOT NULL,
+  laba_d INT,
+  PRIMARY KEY (id_d)
+);
+
+CREATE TABLE supplier
+( id_s INT NOT NULL AUTO_INCREMENT,
+  nama_s VARCHAR(25) UNIQUE NOT NULL,
+  PRIMARY KEY (id_s)
+);
+
+CREATE TABLE kode_barang
+( kode_barang VARCHAR(25),
+  nama_kb VARCHAR(50),
+  satuan_kb VARCHAR(25),
+  id_d INT,
+  PRIMARY KEY (kode_barang),
+  FOREIGN KEY (id_d) REFERENCES departemen(id_d) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE harga
+( kode_barang VARCHAR(50) NOT NULL UNIQUE,
+  rppokok_h DECIMAL(18,2),
+  rpjual_h DECIMAL(18,2),
+  FOREIGN KEY (kode_barang) REFERENCES kode_barang(kode_barang) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE nota
+( id_n INT AUTO_INCREMENT NOT NULL,
+  no_n VARCHAR(25),
+  tanggal_n DATETIME,
+  klien_n VARCHAR(25),
+  petugas_n VARCHAR(25),
+  rpjumlah_n DECIMAL(18,2),
+  rpppn_n DECIMAL(18,2),
+  rptotal_n DECIMAL(18,2),
+  time_stamp timestamp,
+  PRIMARY KEY (id_n)
+);
+
+CREATE TABLE barang_masuk
+( id_bm INT AUTO_INCREMENT,
+  kode_barang VARCHAR(25),
+  nama_kb VARCHAR(25),
+  satuan_kb VARCHAR(25),
+  petugas_bm VARCHAR(25),
+  id_s INT,
+  nama_s VARCHAR(25),
+  tanggal_bm DATETIME,
+  jumlah_bm INT,
+  rpsatuan_bm DECIMAL(18,2),
+  rptotal_bm DECIMAL(18,2),
+  time_stamp timestamp,
+  PRIMARY KEY (id_bm)
+);
+
+CREATE TABLE barang_keluar
+( id_bk INT AUTO_INCREMENT,
+  id_n INT,
+  kode_barang VARCHAR(25),
+  nama_kb VARCHAR(25),
+  jumlah_bk INT,
+  satuan_kb VARCHAR(25),
+  rphargasatuan_bk DECIMAL(18,2),
+  rptotal_bk DECIMAL(18,2),
+  time_stamp timestamp,
+  PRIMARY KEY (id_bk),
+  FOREIGN KEY (id_n) REFERENCES nota(id_n) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE karung (
+  kode_barang VARCHAR(25) NOT NULL UNIQUE,
+  jumlah_ka INT,
+  FOREIGN KEY (kode_barang) REFERENCES kode_barang(kode_barang) ON DELETE CASCADE ON UPDATE CASCADE
+);

@@ -1,22 +1,21 @@
 <?php
 
-class Departemen
+class MHarga
 {
-  public function baca()
+  public function bacaPerKodeBarang($kodeBarang)
   {
     $DB = new Database;
     $DB->basisdata = basisData();
-    $qwr = "SELECT id_d, nama_d FROM departemen";
+    $qwr = "SELECT kode_barang, rppokok_h, rpjual_h FROM harga WHERE kode_barang = '$kodeBarang' ";
     $data = $DB->baca($qwr);
     return $data;
   }
 
-  public function bacaBaris()
+  public function bacaId($nama)
   {
-    $id = formatQuery($_REQUEST["id"]);
     $DB = new Database;
     $DB->basisdata = basisData();
-    $qwr = "SELECT id_d, nama_d FROM departemen WHERE id_d = '$id' ";
+    $qwr = "SELECT id_s, nama_s FROM supplier WHERE nama_s = '$nama' ";
     $data = $DB->baca($qwr);
     return $data;
   }
@@ -25,24 +24,22 @@ class Departemen
   {
     $DB = new Database;
     $DB->basisdata = basisData();
-    $qwr = "INSERT INTO departemen (nama_d, laba_d)
-            VALUES ('$nama', 0)";
+    $qwr = "INSERT INTO supplier (nama_s) VALUES ('$nama')";
     $tf = $DB->eksekusi($qwr);
     if ($tf) {
       return true;
     }else {
       return false;
     }
-
   }
 
   public function edit($id, $nama)
   {
     $DB = new Database;
     $DB->basisdata = basisData();
-    $qwr = "UPDATE departemen
-            SET nama_d = '$nama', laba_d = 0
-            WHERE id_d = $id ";
+    $qwr = "UPDATE supplier
+            SET nama_s = '$nama'
+            WHERE id_s = $id ";
     $tf = $DB->eksekusi($qwr);
     if ($tf) {
       return true;
@@ -55,13 +52,25 @@ class Departemen
   {
     $DB = new Database;
     $DB->basisdata = basisData();
-    $qwr = "DELETE FROM departemen WHERE id_d = $id ";
+    $qwr = "DELETE FROM supplier WHERE id_s = $id ";
     $tf = $DB->eksekusi($qwr);
     if ($tf) {
       return true;
     }else {
       return false;
     }
+  }
+
+  public function editHarga($kodeBarang, $hPokok, $hJual)
+  {
+    $DB = new Database;
+    $DB->basisdata = basisData();
+    $qwr = "UPDATE harga
+            SET rpjual_h = $hJual
+            WHERE kode_barang = '$kodeBarang' ";
+    $tf = $DB->eksekusi($qwr);
+    if ($tf) return true;
+    else return false;
   }
 }
 

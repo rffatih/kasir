@@ -58,6 +58,17 @@ class Database
     }
   }
 
+  public function multiEksekusi($query)
+  {
+    $konek = $this->konek();
+    if ($konek) {
+      $buff = mysqli_multi_query($konek, $query);
+      return $buff;
+    } else {
+      return false;
+    }
+  }
+
 }
 
 ?>

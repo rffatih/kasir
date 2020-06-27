@@ -84,7 +84,7 @@ class View
     $head["jss"][] = $this->dirjss."departemen.js";
     $body["nav"]   = $this->navigasi;
     $body["akt"]   = $this->dirakt."departemen.php";
-
+    
     $this->html($head, $body, $data);
   }
 
@@ -178,11 +178,24 @@ class View
 
   public function harga($data)
   {
+    $proteksi = "proteksi";
+    include $this->dirpra."harga.php";
+
     $head["css"][] = $this->dircss."langgam.css";
     $body["nav"]   = $this->navigasi;
     $body["akt"]   = $this->dirakt."harga.php";
 
     $this->html($head, $body, $data);
+  }
+
+  public function suntingHarga($data)
+  {
+    $head["css"][] = $this->dircss."langgam.css";
+    $head["jss"][] = $this->dirjss."suntingharga.js";
+    $body["akt"]   = $this->dirakt."suntingharga.php";
+
+    $this->html($head, $body, $data);
+
   }
 
   public function fifo($data)

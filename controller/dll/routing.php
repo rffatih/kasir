@@ -93,6 +93,12 @@ if (isset($this->proteksi))
         $Aktifiti->index();
       }
       break;
+    case 'suntingharga':
+      if (validasiBasisData()) {
+        $Aktifiti = new ASuntingHarga;
+        $Aktifiti->index();
+      }
+      break;
     case 'fifo':
       if (validasiBasisData()) {
         $Aktifiti = new AFifo;
