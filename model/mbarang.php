@@ -93,13 +93,13 @@ class MBarang
             INNER JOIN kode_barang kb ON kb.id_d = d.id_d
             WHERE kb.kode_barang = '$kb' ";
     $aaa = $Conn->baca($qwr);
-    $persenLaba = $aaa[0][0];
-    $namaKB     = $aaa[0][1];
-    $satuanKB   = $aaa[0][2];
+    $persenLaba = formatQuery($aaa[0][0]);
+    $namaKB     = formatQuery($aaa[0][1]);
+    $satuanKB   = formatQuery($aaa[0][2]);
 
     $qwr   = "SELECT nama_s FROM supplier WHERE id_s = $id_s ";
     $aaa   = $Conn->baca($qwr);
-    $namaS = $aaa[0][0];
+    $namaS = formatQuery($aaa[0][0]);
 
     $qwr = "SELECT rppokok_h FROM harga WHERE kode_barang = '$kb' ";
     $aaa = $Conn->baca($qwr);
@@ -167,8 +167,8 @@ class MBarang
       // ambil data tabel kode_barang
       $qwr = "SELECT nama_kb, satuan_kb FROM kode_barang WHERE kode_barang = '$kodeBarang[$i]' ";
       $aaa = $Conn->baca($qwr);
-      $namaKB   = $aaa[0][0];
-      $satuanKB = $aaa[0][1];
+      $namaKB   = formatQuery($aaa[0][0]);
+      $satuanKB = formatQuery($aaa[0][1]);
 
       // Tabel barang keluar
       $qwr  = "INSERT INTO barang_keluar

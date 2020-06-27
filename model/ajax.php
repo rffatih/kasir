@@ -130,11 +130,11 @@ class Ajax
           case 'penjualan':
             $noNota = formatQuery($_POST["no-nota"]);
             $yth    = formatQuery($_POST["yth"]);
-            $kodeBarang = formatQuery($_POST["kode-barang"]);
-            $jumlahBarang = formatQuery($_POST["jumlah-barang"]);
-            $hargaBaris = formatQuery($_POST["harga"]);
-            $totalBaris = formatQuery($_POST["total"]);
-            $pembayaran = formatQuery($_POST["pembayaran"]);
+            $kodeBarang = $_POST["kode-barang"];
+            $jumlahBarang = $_POST["jumlah-barang"];
+            $hargaBaris = $_POST["harga"];
+            $totalBaris = $_POST["total"];
+            $pembayaran = $_POST["pembayaran"];
             $this->penjualan($noNota, $yth, $kodeBarang, $jumlahBarang, $hargaBaris, $totalBaris, $pembayaran);
             break;
 
